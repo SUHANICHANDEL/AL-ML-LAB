@@ -1,0 +1,51 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Load the dataset
+file_path = '/content/diabetes[1].csv'
+data = pd.read_csv(file_path)
+x = data['Glucose']
+y = data['BMI']
+
+# Initialize parameters
+theta_1 = 0.0
+theta_0 = 0.0
+learning_rate = 0.0001
+iterations = 10000
+
+# Compute cost function
+def compute_cost(x, y, theta_1, theta_0):
+    m = len(x)
+    predictions = theta_1 * x + theta_0
+    cost = (1 / (2 * m)) * sum((predictions - y) ** 2)
+    return cost
+
+# Perform gradient descent
+def gradient_descent(x, y, theta_1, theta_0, learning_rate):
+    m = len(y)
+    predictions = theta_1 * x + theta_0
+    d_1 = (1 / m) * sum((predictions - y) * x)
+    d_0 = (1 / m) * sum(predictions - y)
+    theta_1 -= learning_rate * d_1
+    theta_0 -= learning_rate * d_0
+    return theta_1, theta_0
+
+# Run the gradient descent loop
+for i in range(iterations):
+    theta_1, theta_0 = gradient_descent(x, y, theta_1, theta_0, learning_rate)
+    if i % 100 == 0:
+        cost = compute_cost(x, y, theta_1, theta_0)
+        print(f"Iteration {i}, Cost: {cost:.4f}, theta_1: {theta_1:.4f}, theta_0: {theta_0:.4f}")
+
+# Final parameters
+print(f"\nFinal parameters: theta_1 = {theta_1:.4f}, theta_0 = {theta_0:.4f}")
+
+# Plot the results
+y_pred = theta_1 * x + theta_0
+plt.scatter(x, y, color="blue", label="Actual Data")
+plt.plot(x, y_pred, color='red', label='Fitted Line')
+plt.xlabel('x')
+plt.ylabel('y')
+plt.legend()
+plt.title('Linear Regression from Scratch')
+plt.show()
