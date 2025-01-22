@@ -1,0 +1,26 @@
+import random
+import matplotlib.pyplot as plt
+x = [random.uniform(0, 100) for _ in range(100)]
+y = [2.5 * xi + random.uniform(-10, 10) for xi in x]
+x_mean = sum(x) / len(x)
+y_mean = sum(y) / len(y)
+n = sum((xi - x_mean) * (yi - y_mean) for xi, yi in zip(x, y))
+d = sum((xi - x_mean) ** 2 for xi in x)
+theta_1 = n / d
+theta_0 = y_mean - theta_1 * x_mean
+print(f"Slope (theta_1): {theta_1}")
+print(f"Intercept (theta_0): {theta_0}")
+def predict(x_values):
+    return [theta_0 + theta_1 * xi for xi in x_values]
+x_test = [120, 130, 140]
+y_pred = predict(x_test)
+print( y_pred)
+plt.scatter(x, y, color="blue", label="Original data", alpha=0.6)
+x_line = [min(x), max(x)]
+y_line = predict(x_line)
+plt.plot(x_line, y_line, color="red", label="Regression line")
+plt.xlabel("x")
+plt.ylabel("y")
+plt.legend()
+plt.title("Linear Regression ")
+plt.show()
